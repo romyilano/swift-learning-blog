@@ -15,18 +15,25 @@
     }
 
     :root {
+      /* Coolors palette: https://coolors.co/00916e-feefe5-ffcf00-ee6123-fa003f */
+      --sea-green: #00916e;
+      --linen: #feefe5;
+      --bright-amber: #ffcf00;
+      --cayenne-red: #ee6123;
+      --lipstick-red: #fa003f;
+
       --ink: #1a1a1a;
       --ink-light: #444;
-      --ink-faint: #888;
+      --ink-faint: #6b7280;
       --white: #ffffff;
-      --off-white: #fafaf8;
-      --accent: #2563eb;
-      --accent-light: #eff6ff;
-      --tag-bg: #f1f5f9;
-      --tag-text: #334155;
-      --border: #e2e8f0;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
-      --shadow-hover: 0 4px 12px rgba(0,0,0,0.12), 0 8px 32px rgba(0,0,0,0.08);
+      --off-white: var(--linen);
+      --accent: var(--sea-green);
+      --accent-light: #d4f0e8;
+      --tag-bg: #fde8d5;
+      --tag-text: #7a3010;
+      --border: #e8d5c4;
+      --shadow: 0 1px 3px rgba(0,145,110,0.10), 0 4px 16px rgba(0,145,110,0.06);
+      --shadow-hover: 0 4px 12px rgba(0,145,110,0.18), 0 8px 32px rgba(0,145,110,0.10);
     }
 
     html {
@@ -36,7 +43,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--white);
+      background: var(--linen);
       color: var(--ink);
       line-height: 1.6;
       min-height: 100vh;
@@ -49,7 +56,7 @@
       padding: 3.5rem 1.5rem 2.5rem;
       text-align: center;
       border-bottom: 1px solid var(--border);
-      background: var(--white);
+      background: var(--sea-green);
     }
 
     .site-header .ink-deco {
@@ -66,7 +73,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.15;
-      color: var(--ink);
+      color: var(--linen);
       position: relative;
       display: inline-block;
     }
@@ -75,7 +82,7 @@
       content: '';
       display: block;
       height: 4px;
-      background: var(--ink);
+      background: var(--bright-amber);
       border-radius: 2px;
       margin-top: 6px;
       /* hand-drawn uneven underline via clip-path */
@@ -85,7 +92,7 @@
     .site-tagline {
       margin-top: 0.75rem;
       font-size: 1.05rem;
-      color: var(--ink-light);
+      color: var(--accent-light);
       font-style: italic;
       font-family: 'Lora', Georgia, serif;
     }
@@ -116,8 +123,8 @@
 
     .tag-filter button:hover,
     .tag-filter button.active {
-      border-color: var(--ink);
-      background: var(--ink);
+      border-color: var(--sea-green);
+      background: var(--sea-green);
       color: var(--white);
     }
 
@@ -176,7 +183,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: var(--ink);
+      background: var(--cayenne-red);
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.22s ease;
@@ -186,7 +193,7 @@
     .post-card:hover {
       transform: translateY(-3px);
       box-shadow: var(--shadow-hover);
-      border-color: #c8d0dc;
+      border-color: var(--cayenne-red);
     }
 
     .post-card:hover::before {
@@ -245,7 +252,7 @@
     }
 
     .post-card:hover .tag {
-      background: #e2e8f0;
+      background: #f9d0b4;
     }
 
     .read-more {
@@ -275,7 +282,7 @@
       gap: 2rem;
       padding: 2rem;
       align-items: flex-start;
-      background: var(--off-white);
+      background: #fff8f0;
     }
 
     .post-card.featured .post-illustration {
@@ -306,9 +313,9 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--ink);
-      background: #fef9c3;
-      border: 1px solid #fde68a;
+      color: #7a3010;
+      background: var(--bright-amber);
+      border: 1px solid #e6b800;
       border-radius: 4px;
       padding: 0.2rem 0.5rem;
       width: fit-content;
@@ -340,7 +347,7 @@
     }
 
     footer a {
-      color: var(--ink-light);
+      color: var(--sea-green);
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -375,27 +382,27 @@
 
   <!-- Inky top-left decoration -->
   <svg class="ink-deco ink-deco-tl" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M20,240 Q10,180 30,140 Q50,100 40,60 Q35,30 60,20 Q100,10 130,30 Q160,50 150,90 Q140,130 160,160 Q175,185 165,220 Q155,250 120,255 Q80,260 50,245 Q25,235 20,240Z" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M40,200 Q35,170 50,150 Q70,125 60,95 Q55,75 75,65" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,6" stroke-linecap="round"/>
-    <circle cx="90" cy="40" r="3" fill="#1a1a1a" opacity="0.5"/>
-    <circle cx="140" cy="200" r="2" fill="#1a1a1a" opacity="0.4"/>
-    <path d="M100,80 Q115,70 125,85 Q110,95 100,80Z" fill="#1a1a1a"/>
-    <path d="M55,170 Q65,160 72,170 Q62,178 55,170Z" fill="#1a1a1a"/>
-    <path d="M10,120 Q15,115 20,120 Q15,124 10,120Z" fill="#1a1a1a" opacity="0.4"/>
-    <line x1="170" y1="30" x2="175" y2="55" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="160" y1="40" x2="185" y2="45" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M20,240 Q10,180 30,140 Q50,100 40,60 Q35,30 60,20 Q100,10 130,30 Q160,50 150,90 Q140,130 160,160 Q175,185 165,220 Q155,250 120,255 Q80,260 50,245 Q25,235 20,240Z" fill="none" stroke="#feefe5" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M40,200 Q35,170 50,150 Q70,125 60,95 Q55,75 75,65" fill="none" stroke="#feefe5" stroke-width="1" stroke-dasharray="4,6" stroke-linecap="round"/>
+    <circle cx="90" cy="40" r="3" fill="#feefe5" opacity="0.5"/>
+    <circle cx="140" cy="200" r="2" fill="#feefe5" opacity="0.4"/>
+    <path d="M100,80 Q115,70 125,85 Q110,95 100,80Z" fill="#feefe5"/>
+    <path d="M55,170 Q65,160 72,170 Q62,178 55,170Z" fill="#feefe5"/>
+    <path d="M10,120 Q15,115 20,120 Q15,124 10,120Z" fill="#feefe5" opacity="0.4"/>
+    <line x1="170" y1="30" x2="175" y2="55" stroke="#feefe5" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="160" y1="40" x2="185" y2="45" stroke="#feefe5" stroke-width="1.2" stroke-linecap="round"/>
   </svg>
 
   <!-- Inky bottom-right decoration -->
   <svg class="ink-deco ink-deco-br" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M10,10 Q50,5 90,20 Q130,35 160,20 Q185,10 200,30 Q215,50 205,80 Q195,110 210,140 Q220,165 200,185 Q175,200 145,195 Q110,190 80,200 Q45,210 20,190 Q0,175 5,150 Q10,125 0,95 Q-5,65 10,40 Q18,20 10,10Z" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M50,60 Q80,50 100,65 Q85,75 50,60Z" fill="#1a1a1a" opacity="0.6"/>
-    <path d="M130,130 Q155,125 160,140 Q148,148 130,130Z" fill="#1a1a1a" opacity="0.5"/>
-    <circle cx="175" cy="70" r="4" fill="#1a1a1a" opacity="0.4"/>
-    <circle cx="40" cy="150" r="2.5" fill="#1a1a1a" opacity="0.35"/>
-    <path d="M90,110 Q95,105 100,110 Q95,115 90,110Z" fill="#1a1a1a"/>
-    <line x1="60" y1="30" x2="58" y2="50" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
-    <line x1="160" y1="80" x2="180" y2="85" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
+    <path d="M10,10 Q50,5 90,20 Q130,35 160,20 Q185,10 200,30 Q215,50 205,80 Q195,110 210,140 Q220,165 200,185 Q175,200 145,195 Q110,190 80,200 Q45,210 20,190 Q0,175 5,150 Q10,125 0,95 Q-5,65 10,40 Q18,20 10,10Z" fill="none" stroke="#feefe5" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M50,60 Q80,50 100,65 Q85,75 50,60Z" fill="#feefe5" opacity="0.6"/>
+    <path d="M130,130 Q155,125 160,140 Q148,148 130,130Z" fill="#feefe5" opacity="0.5"/>
+    <circle cx="175" cy="70" r="4" fill="#feefe5" opacity="0.4"/>
+    <circle cx="40" cy="150" r="2.5" fill="#feefe5" opacity="0.35"/>
+    <path d="M90,110 Q95,105 100,110 Q95,115 90,110Z" fill="#feefe5"/>
+    <line x1="60" y1="30" x2="58" y2="50" stroke="#feefe5" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
+    <line x1="160" y1="80" x2="180" y2="85" stroke="#feefe5" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
   </svg>
 
   <h1 class="site-title">Swift Learning Blog</h1>
