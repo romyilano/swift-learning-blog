@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swift Learning Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ink: #1a1a1a;
+      --ink-light: #444;
+      --ink-faint: #888;
+      --white: #ffffff;
+      --off-white: #fafaf8;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --tag-bg: #f1f5f9;
+      --tag-text: #334155;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,0.12), 0 8px 32px rgba(0,0,0,0.08);
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .site-header {
+      position: relative;
+      overflow: hidden;
+      padding: 3.5rem 1.5rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    .site-header .ink-deco {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.12;
+    }
+    .ink-deco-tl { top: -20px; left: -20px; width: 260px; }
+    .ink-deco-br { bottom: -30px; right: -10px; width: 220px; transform: rotate(180deg); }
+
+    .site-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--ink);
+      position: relative;
+      display: inline-block;
+    }
+
+    .site-title::after {
+      content: '';
+      display: block;
+      height: 4px;
+      background: var(--ink);
+      border-radius: 2px;
+      margin-top: 6px;
+      /* hand-drawn uneven underline via clip-path */
+      clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 80%);
+    }
+
+    .site-tagline {
+      margin-top: 0.75rem;
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      font-style: italic;
+      font-family: 'Lora', Georgia, serif;
+    }
+
+    /* ─── Nav / Filter ───────────────────────────────────────── */
+    .tag-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--off-white);
+    }
+
+    .tag-filter button {
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--ink-light);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      font-family: inherit;
+    }
+
+    .tag-filter button:hover,
+    .tag-filter button.active {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    /* ─── Main layout ────────────────────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .section-heading {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-faint);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── Blog cards ─────────────────────────────────────────── */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .post-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1.6rem 1.4rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.22s ease;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .post-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: #c8d0dc;
+    }
+
+    .post-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+    }
+
+    .post-meta .dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+    }
+
+    .post-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .post-excerpt {
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .post-card:hover .tag {
+      background: #e2e8f0;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: auto;
+      padding-top: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .read-more svg {
+      transition: transform 0.18s ease;
+    }
+
+    .post-card:hover .read-more svg {
+      transform: translateX(3px);
+    }
+
+    /* ─── Featured post ──────────────────────────────────────── */
+    .post-card.featured {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      gap: 2rem;
+      padding: 2rem;
+      align-items: flex-start;
+      background: var(--off-white);
+    }
+
+    .post-card.featured .post-illustration {
+      flex-shrink: 0;
+      width: 180px;
+    }
+
+    .post-card.featured .post-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .post-card.featured .post-title {
+      font-size: 1.5rem;
+    }
+
+    .post-card.featured .post-excerpt {
+      font-size: 0.95rem;
+    }
+
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+      background: #fef9c3;
+      border: 1px solid #fde68a;
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      width: fit-content;
+    }
+
+    /* ─── Ink illustrations (inline SVG) ────────────────────── */
+    .ink-illustration {
+      width: 100%;
+      height: auto;
+    }
+
+    /* ─── Divider ────────────────────────────────────────────── */
+    .ink-divider {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 2.5rem auto;
+      height: 20px;
+      opacity: 0.18;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      font-size: 0.82rem;
+      color: var(--ink-faint);
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--ink-light);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .post-card.featured {
+        flex-direction: column;
+      }
+      .post-card.featured .post-illustration {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ─── Hidden utility ─────────────────────────────────────── */
+    .post-card[data-hidden="true"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+
+  <!-- Inky top-left decoration -->
+  <svg class="ink-deco ink-deco-tl" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M20,240 Q10,180 30,140 Q50,100 40,60 Q35,30 60,20 Q100,10 130,30 Q160,50 150,90 Q140,130 160,160 Q175,185 165,220 Q155,250 120,255 Q80,260 50,245 Q25,235 20,240Z" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M40,200 Q35,170 50,150 Q70,125 60,95 Q55,75 75,65" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,6" stroke-linecap="round"/>
+    <circle cx="90" cy="40" r="3" fill="#1a1a1a" opacity="0.5"/>
+    <circle cx="140" cy="200" r="2" fill="#1a1a1a" opacity="0.4"/>
+    <path d="M100,80 Q115,70 125,85 Q110,95 100,80Z" fill="#1a1a1a"/>
+    <path d="M55,170 Q65,160 72,170 Q62,178 55,170Z" fill="#1a1a1a"/>
+    <path d="M10,120 Q15,115 20,120 Q15,124 10,120Z" fill="#1a1a1a" opacity="0.4"/>
+    <line x1="170" y1="30" x2="175" y2="55" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="160" y1="40" x2="185" y2="45" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>
+
+  <!-- Inky bottom-right decoration -->
+  <svg class="ink-deco ink-deco-br" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M10,10 Q50,5 90,20 Q130,35 160,20 Q185,10 200,30 Q215,50 205,80 Q195,110 210,140 Q220,165 200,185 Q175,200 145,195 Q110,190 80,200 Q45,210 20,190 Q0,175 5,150 Q10,125 0,95 Q-5,65 10,40 Q18,20 10,10Z" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M50,60 Q80,50 100,65 Q85,75 50,60Z" fill="#1a1a1a" opacity="0.6"/>
+    <path d="M130,130 Q155,125 160,140 Q148,148 130,130Z" fill="#1a1a1a" opacity="0.5"/>
+    <circle cx="175" cy="70" r="4" fill="#1a1a1a" opacity="0.4"/>
+    <circle cx="40" cy="150" r="2.5" fill="#1a1a1a" opacity="0.35"/>
+    <path d="M90,110 Q95,105 100,110 Q95,115 90,110Z" fill="#1a1a1a"/>
+    <line x1="60" y1="30" x2="58" y2="50" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
+    <line x1="160" y1="80" x2="180" y2="85" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,5" stroke-linecap="round"/>
+  </svg>
+
+  <h1 class="site-title">Swift Learning Blog</h1>
+  <p class="site-tagline">Notes on iOS development, memory, concurrency &amp; more</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAG FILTER
+═══════════════════════════════════════════════════════════ -->
+<nav class="tag-filter" aria-label="Filter posts by topic">
+  <button class="active" data-filter="all">All Posts</button>
+  <button data-filter="memory">Memory</button>
+  <button data-filter="concurrency">Concurrency</button>
+  <button data-filter="swift">Swift</button>
+  <button data-filter="architecture">Architecture</button>
+  <button data-filter="ui">UI / SwiftUI</button>
+  <button data-filter="debugging">Debugging</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════════════════ -->
+<main>
+  <p class="section-heading">Latest Articles</p>
+
+  <div class="posts-grid" id="postsGrid">
+
+    <!-- ── FEATURED POST ─────────────────────────── -->
+    <a href="posts/heap-stack-memory.html"
+       class="post-card featured"
+       data-tags="memory,swift"
+       aria-label="Read: The Heap &amp; The Stack — Notes on Memory in iOS">
+
+      <div class="post-illustration" aria-hidden="true">
+        <!-- Inky memory diagram illustration -->
+        <svg class="ink-illustration" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stack box -->
+          <rect x="20" y="100" width="65" height="85" rx="4"
+                fill="none" stroke="#1a1a1a" stroke-width="2"
+                stroke-dasharray="6,3"/>
+          <text x="52" y="115" text-anchor="middle" font-family="Lora,Georgia,serif"
+                font-size="10" font-weight="700" fill="#1a1a1a">STACK</text>
+          <rect x="26" y="122" width="53" height="14" rx="2" fill="#1a1a1a" opacity="0.08"/>
+          <rect x="26" y="140" width="53" height="14" rx="2" fill="#1a1a1a" opacity="0.12"/>
+          <rect x="26" y="158" width="53" height="14" rx="2" fill="#1a1a1a" opacity="0.07"/>
+
+          <!-- Heap blob -->
+          <path d="M100,80 Q125,55 155,70 Q175,80 168,110 Q162,135 145,145 Q120,155 105,140 Q85,125 88,105 Q90,88 100,80Z"
+                fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          <text x="130" y="105" text-anchor="middle" font-family="Lora,Georgia,serif"
+                font-size="10" font-weight="700" fill="#1a1a1a">HEAP</text>
+          <!-- Objects on heap -->
+          <circle cx="118" cy="122" r="6" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <circle cx="140" cy="128" r="5" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+          <circle cx="152" cy="118" r="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+
+          <!-- Arrow from stack to heap -->
+          <path d="M85,155 Q90,165 105,148"
+                fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"
+                marker-end="url(#arrowInk)"/>
+
+          <!-- Doodle pointer label -->
+          <text x="60" y="95" font-family="Lora,Georgia,serif" font-size="9"
+                font-style="italic" fill="#555">pointer</text>
+          <path d="M72,92 Q80,88 85,93"
+                fill="none" stroke="#555" stroke-width="1" stroke-linecap="round"/>
+
+          <!-- Scattered ink dots -->
+          <circle cx="35" cy="55" r="2.5" fill="#1a1a1a" opacity="0.25"/>
+          <circle cx="170" cy="50" r="1.8" fill="#1a1a1a" opacity="0.2"/>
+          <circle cx="15" cy="170" r="1.5" fill="#1a1a1a" opacity="0.18"/>
+
+          <!-- Title area squiggle -->
+          <path d="M10,30 Q30,20 50,28 Q70,36 90,26 Q110,16 130,24 Q150,32 170,22"
+                fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+          <text x="90" y="18" text-anchor="middle" font-family="Lora,Georgia,serif"
+                font-size="11" font-weight="700" fill="#1a1a1a" opacity="0.7">Memory Model</text>
+
+          <defs>
+            <marker id="arrowInk" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#1a1a1a"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="post-content">
+        <span class="featured-badge">⭐ Featured</span>
+        <div class="post-meta">
+          <span>March 2024</span>
+          <span class="dot"></span>
+          <span>8 min read</span>
+        </div>
+        <h2 class="post-title">The Heap &amp; The Stack — Notes on Memory in iOS</h2>
+        <p class="post-excerpt">
+          Value types live on the stack, reference types on the heap — but what does that really mean?
+          A visual walkthrough of how Swift manages memory, why it matters for performance, and how ARC
+          quietly keeps your app alive.
+        </p>
+        <div class="post-tags">
+          <span class="tag">#memory</span>
+          <span class="tag">#swift</span>
+          <span class="tag">#iOS</span>
+          <span class="tag">#ARC</span>
+        </div>
+        <span class="read-more">
+          Read article
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- ── POST 2 ──────────────────────────────── -->
+    <a href="posts/swift-concurrency-async-await.html"
+       class="post-card"
+       data-tags="concurrency,swift"
+       aria-label="Read: Async/Await in Swift — Concurrency Made Readable">
+      <div class="post-meta">
+        <span>February 2024</span>
+        <span class="dot"></span>
+        <span>6 min read</span>
+      </div>
+      <h2 class="post-title">Async/Await in Swift — Concurrency Made Readable</h2>
+      <p class="post-excerpt">
+        From completion handlers and DispatchQueue to structured concurrency — how Swift's new async/await
+        syntax flattens the pyramid of doom and makes threading far less scary.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#concurrency</span>
+        <span class="tag">#async</span>
+        <span class="tag">#swift</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 3 ──────────────────────────────── -->
+    <a href="posts/value-vs-reference-types.html"
+       class="post-card"
+       data-tags="swift,memory"
+       aria-label="Read: Value vs Reference Types — A Swift Deep Dive">
+      <div class="post-meta">
+        <span>January 2024</span>
+        <span class="dot"></span>
+        <span>5 min read</span>
+      </div>
+      <h2 class="post-title">Value vs Reference Types — A Swift Deep Dive</h2>
+      <p class="post-excerpt">
+        Struct or class? Enum or protocol? Understanding value semantics is fundamental to writing
+        safe, predictable Swift code. Let's dig into copy-on-write and when it saves you.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#swift</span>
+        <span class="tag">#memory</span>
+        <span class="tag">#structs</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 4 ──────────────────────────────── -->
+    <a href="posts/swiftui-state-management.html"
+       class="post-card"
+       data-tags="ui,swift"
+       aria-label="Read: SwiftUI State Management — @State, @Binding, @ObservedObject">
+      <div class="post-meta">
+        <span>December 2023</span>
+        <span class="dot"></span>
+        <span>7 min read</span>
+      </div>
+      <h2 class="post-title">SwiftUI State Management — @State, @Binding &amp; @ObservedObject</h2>
+      <p class="post-excerpt">
+        SwiftUI's data-flow property wrappers can feel like a lot at first. Here's a mental model
+        for choosing the right wrapper and avoiding the most common pitfalls.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#SwiftUI</span>
+        <span class="tag">#state</span>
+        <span class="tag">#ui</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 5 ──────────────────────────────── -->
+    <a href="posts/arc-retain-cycles.html"
+       class="post-card"
+       data-tags="memory,swift,debugging"
+       aria-label="Read: ARC & Retain Cycles — The Silent Memory Leak">
+      <div class="post-meta">
+        <span>November 2023</span>
+        <span class="dot"></span>
+        <span>6 min read</span>
+      </div>
+      <h2 class="post-title">ARC &amp; Retain Cycles — The Silent Memory Leak</h2>
+      <p class="post-excerpt">
+        Automatic Reference Counting is powerful, but closures and delegate patterns can create
+        strong reference cycles that silently keep objects alive. Spot them, break them.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#ARC</span>
+        <span class="tag">#memory</span>
+        <span class="tag">#debugging</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 6 ──────────────────────────────── -->
+    <a href="posts/mvvm-in-ios.html"
+       class="post-card"
+       data-tags="architecture,swift"
+       aria-label="Read: MVVM in iOS — Clean Architecture Without the Boilerplate">
+      <div class="post-meta">
+        <span>October 2023</span>
+        <span class="dot"></span>
+        <span>9 min read</span>
+      </div>
+      <h2 class="post-title">MVVM in iOS — Clean Architecture Without the Boilerplate</h2>
+      <p class="post-excerpt">
+        MVC gets messy fast. MVVM gives you testability and separation of concerns, but it's easy
+        to over-engineer. Here's a pragmatic version that scales without overwhelming you.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#MVVM</span>
+        <span class="tag">#architecture</span>
+        <span class="tag">#iOS</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 7 ──────────────────────────────── -->
+    <a href="posts/debugging-instruments.html"
+       class="post-card"
+       data-tags="debugging,memory"
+       aria-label="Read: Instruments — Profiling Memory Leaks & Allocations">
+      <div class="post-meta">
+        <span>September 2023</span>
+        <span class="dot"></span>
+        <span>5 min read</span>
+      </div>
+      <h2 class="post-title">Instruments — Profiling Memory Leaks &amp; Allocations</h2>
+      <p class="post-excerpt">
+        Xcode's Instruments tool is intimidating at first, but once you know where to look,
+        tracking down memory leaks and allocation spikes becomes almost satisfying.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#instruments</span>
+        <span class="tag">#debugging</span>
+        <span class="tag">#profiling</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 8 ──────────────────────────────── -->
+    <a href="posts/actors-swift-concurrency.html"
+       class="post-card"
+       data-tags="concurrency,swift"
+       aria-label="Read: Actors in Swift — Safe Shared State">
+      <div class="post-meta">
+        <span>August 2023</span>
+        <span class="dot"></span>
+        <span>7 min read</span>
+      </div>
+      <h2 class="post-title">Actors in Swift — Safe Shared State</h2>
+      <p class="post-excerpt">
+        Before actors, protecting mutable state across threads meant locks, semaphores, and serial
+        queues. Swift actors make data isolation a compile-time guarantee.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#actors</span>
+        <span class="tag">#concurrency</span>
+        <span class="tag">#swift</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 9 ──────────────────────────────── -->
+    <a href="posts/generics-protocols-swift.html"
+       class="post-card"
+       data-tags="swift"
+       aria-label="Read: Generics & Protocols — Swift's Superpower">
+      <div class="post-meta">
+        <span>July 2023</span>
+        <span class="dot"></span>
+        <span>8 min read</span>
+      </div>
+      <h2 class="post-title">Generics &amp; Protocols — Swift's Superpower</h2>
+      <p class="post-excerpt">
+        Generic code lets you write flexible, reusable functions and types that can work with any
+        type subject to requirements. Combine with protocols for true abstraction.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#generics</span>
+        <span class="tag">#protocols</span>
+        <span class="tag">#swift</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- ── POST 10 ─────────────────────────────── -->
+    <a href="posts/custom-views-swiftui.html"
+       class="post-card"
+       data-tags="ui,swift"
+       aria-label="Read: Custom Views in SwiftUI — Shapes, GeometryReader & Canvas">
+      <div class="post-meta">
+        <span>June 2023</span>
+        <span class="dot"></span>
+        <span>6 min read</span>
+      </div>
+      <h2 class="post-title">Custom Views in SwiftUI — Shapes, GeometryReader &amp; Canvas</h2>
+      <p class="post-excerpt">
+        Beyond VStack and HStack lies a world of custom shapes, geometry-aware layouts, and
+        low-level Canvas drawing. This is where SwiftUI becomes truly expressive.
+      </p>
+      <div class="post-tags">
+        <span class="tag">#SwiftUI</span>
+        <span class="tag">#canvas</span>
+        <span class="tag">#ui</span>
+      </div>
+      <span class="read-more">
+        Read article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+  </div><!-- /posts-grid -->
+
+  <!-- Inky divider squiggle -->
+  <svg class="ink-divider" viewBox="0 0 340 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M0,10 Q17,2 34,10 Q51,18 68,10 Q85,2 102,10 Q119,18 136,10 Q153,2 170,10 Q187,18 204,10 Q221,2 238,10 Q255,18 272,10 Q289,2 306,10 Q323,18 340,10"
+          fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    Made with ink &amp; curiosity ·
+    <a href="https://romyilano.hashnode.dev" target="_blank" rel="noopener noreferrer">Hashnode</a>
+  </p>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TAG FILTER SCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.tag-filter button');
+    var cards   = document.querySelectorAll('.post-card');
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var filter = btn.getAttribute('data-filter');
+
+        // Update active button
+        buttons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        // Show / hide cards
+        cards.forEach(function (card) {
+          var tags = (card.getAttribute('data-tags') || '').split(',');
+          if (filter === 'all' || tags.indexOf(filter) !== -1) {
+            card.setAttribute('data-hidden', 'false');
+          } else {
+            card.setAttribute('data-hidden', 'true');
+          }
+        });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
